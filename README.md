@@ -5,3 +5,6 @@
 - pip install -r requirements.txt
 
 Set proper values in settings.py
+
+## How to run
+$ python3 flag_time.py
