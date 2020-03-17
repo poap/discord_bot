@@ -16,7 +16,7 @@ async def on_ready():
     await client.change_presence(status=discord.Status.idle, activity=activity)
 
 
-async def check_time():
+async def check_flag():
     now = datetime.now(timezone(timedelta(hours=9)))
     if now.hour == 12 or now.hour == 19 or now.hour == 21:
         if (now.minute == 56 and now.second >= 30) or (now.minute == 57 and now.second < 30):
@@ -25,11 +25,24 @@ async def check_time():
                 print(f'Channel not connected ({now})')
             else:
                 await channel.send('플래그')
+            return True
+    return False
 
 
-async def flag_loop(timeout=60):
+async def check_urus():
+    now = datetime.now(timezone(timedelta(hours=9)))
+    if now.hour == 21 and (now.minute == 45 or now.minute == 30):
+        channel = client.get_channel(settings.urus_channel_id)
+        if channel is not None:
+            await channel.send('아 맞다, 우르스!')
+        return True
+    return False
+
+
+async def time_check(timeout=60):
     while True:
-        await check_time()
+        await check_flag()
+        await check_urus()
         await asyncio.sleep(timeout)
 
 
@@ -37,7 +50,7 @@ loop = asyncio.get_event_loop()
 try:
     loop.run_until_complete(client.login(settings.bot_id))
     asyncio.ensure_future(client.connect())
-    asyncio.ensure_future(flag_loop())
+    asyncio.ensure_future(time_check())
     loop.run_forever()
 except KeyboardInterrupt:
     loop.run_until_complete(client.logout())
