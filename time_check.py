@@ -39,6 +39,16 @@ async def check_urus():
     return False
 
 
+async def check_bless_of_guild():
+    now = datetime.now(timezone(timedelta(hours=9)))
+    if now.weekday == 0 and now.hour == 23 and now.minute == 50:
+        channel = client.get_channel(settings.bless_channel_id)
+        if channel is not None:
+            await channel.send('아 맞다, 길축!')
+        return True
+    return False
+
+
 async def time_check(timeout=60):
     while True:
         await check_flag()
