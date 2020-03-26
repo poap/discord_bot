@@ -18,7 +18,7 @@ async def on_ready():
 
 async def check_flag():
     now = datetime.now(timezone(timedelta(hours=9)))
-    if now.hour == 12 or now.hour == 19 or now.hour == 21:
+    if now.hour == 11 or now.hour == 18 or now.hour == 20:
         if (now.minute == 56 and now.second >= 30) or (now.minute == 57 and now.second < 30):
             channel = client.get_channel(settings.flag_channel_id)
             if channel is None:
